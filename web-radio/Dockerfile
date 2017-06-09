@@ -2,8 +2,7 @@ FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apt-get update -y
-RUN apt-get install -y --fix-missing mpd
+RUN apk add --no-cache mpd
 
 COPY requirements.txt requirements.txt
 COPY mpdconfig.conf mpdconfig.conf

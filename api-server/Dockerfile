@@ -2,8 +2,6 @@ FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apt-get update -y
-
 COPY requirements.txt requirements.txt
 COPY api-server api-server
 
