@@ -5,10 +5,9 @@ MAINTAINER Mads Kalør "mads@kaloer.com"
 COPY requirements.txt requirements.txt
 COPY api-server api-server
 
-RUN apk --update add py-gunicorn
+RUN apk --update add --no-cache py-gunicorn
 
 RUN pip install -r requirements.txt
-RUN cp /usr/glibc-compat/lib/ld-linux-armhf.so.3 /lib
 
 WORKDIR api-server
 

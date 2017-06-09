@@ -14,4 +14,4 @@ RUN mpd mpdconfig.conf
 
 WORKDIR web-radio
 
-CMD python radio_server.py
+CMD python3 radio_server.py
