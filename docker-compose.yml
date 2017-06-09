@@ -19,8 +19,8 @@ services:
     container_name: rpi-radio
     expose:
       - "50051" # gRPC
-#    devices:
-#      - /dev/snd:/dev/snd
+    devices:
+      - /dev/snd:/dev/snd
 
   app-server:
     build:

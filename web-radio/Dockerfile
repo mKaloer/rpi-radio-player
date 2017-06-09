@@ -2,16 +2,14 @@ FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apk add --no-cache mpd libc6-compat
+RUN apk add --no-cache mpd libc6-compat supervisor
+
+COPY supervisord.conf supervisord.conf
+COPY mpdconfig.conf mpdconfig.conf
 
 COPY requirements.txt requirements.txt
-COPY mpdconfig.conf mpdconfig.conf
 COPY web-radio web-radio
 
 RUN pip install -r requirements.txt
 
-RUN mpd mpdconfig.conf
-
-WORKDIR web-radio
-
-CMD python3 radio_server.py
+CMD supervisord -c supervisord.conf
