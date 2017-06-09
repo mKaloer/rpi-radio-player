@@ -18,6 +18,9 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
     _curr_url = None
     _curr_state = STATE_STOPPED
 
+    def __init__(self):
+        self.radio = radio.Radio()
+
 
     def Play(self, request, context):
         if not request.url:
@@ -38,14 +41,14 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
         self._curr_url = url
         self._curr_state = RadioServicer.STATE_PLAYING
 
-        radio.play_url(url)
+        self.radio.play_url(url)
         return self._get_status()
 
 
     def Stop(self, request, context):
         logging.debug("Stopping")
         self._curr_state = RadioServicer.STATE_STOPPED
-        radio.stop()
+        self.radio.stop()
         return self._get_status()
 
 
