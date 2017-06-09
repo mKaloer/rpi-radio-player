@@ -2,7 +2,7 @@ FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apk add --no-cache mpd libc6-compat supervisord
+RUN apk add --no-cache mpd libc6-compat supervisor
 RUN mkdir -p /var/log/supervisor
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
