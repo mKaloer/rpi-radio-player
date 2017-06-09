@@ -1,4 +1,4 @@
-FROM python:3
+FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 

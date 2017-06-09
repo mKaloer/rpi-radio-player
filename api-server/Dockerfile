@@ -1,11 +1,11 @@
-FROM python:3
+FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apt-get update -y
-
 COPY requirements.txt requirements.txt
 COPY api-server api-server
+
+RUN apk add --no-cache libc6-compat
 
 RUN pip install -r requirements.txt
 

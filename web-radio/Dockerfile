@@ -1,9 +1,8 @@
-FROM python:3
+FROM mielune/alpine-python3-arm
 
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
-RUN apt-get update -y
-RUN apt-get install -y --fix-missing mpd
+RUN apk add --no-cache mpd libc6-compat
 
 COPY requirements.txt requirements.txt
 COPY mpdconfig.conf mpdconfig.conf
@@ -15,4 +14,4 @@ RUN mpd mpdconfig.conf
 
 WORKDIR web-radio
 
-CMD python radio_server.py
+CMD python3 radio_server.py
