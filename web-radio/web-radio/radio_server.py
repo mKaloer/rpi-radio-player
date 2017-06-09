@@ -45,7 +45,7 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
     def Stop(self, request, context):
         logging.debug("Stopping")
         self._curr_state = RadioServicer.STATE_STOPPED
-        # TODO: Stop
+        radio.stop()
         return self._get_status()
 
 
