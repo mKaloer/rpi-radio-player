@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+  api-server:
+    build:
+      context: ./api-server
+    restart: always
+    container_name: rpi-radio-api
+    expose:
+      - "50051" # gRPC
+    ports:
+      - "8081:8080"
+
+  web-radio:
+    build:
+      context: ./web-radio
+    restart: always
+    container_name: rpi-radio
+    expose:
+      - "50051" # gRPC
+    devices:
+      - /dev/snd:/dev/snd
+
+  app-server:
+    build:
+      context: ./app-server
+    restart: always
+    container_name: rpi-radio-app
+    ports:
+      - "8082:8080"

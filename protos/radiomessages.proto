@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+message PlayRequest {
+    optional string url = 1;
+}
+
+message StatusResponse {
+    string url = 1;
+    enum State {
+        PLAYING = 0;
+        STOPPED = 1;
+        MUTED = 2;
+    }
+    State state = 2;
+}
+
+service Radio {
+    rpc Play (PlayRequest) returns (StatusResponse);
+    rpc Stop (google.protobuf.Empty) returns (StatusResponse);
+    rpc Status (google.protobuf.Empty) returns (StatusResponse);
+}
