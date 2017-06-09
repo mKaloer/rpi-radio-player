@@ -5,6 +5,8 @@ MAINTAINER Mads Kalør "mads@kaloer.com"
 COPY requirements.txt requirements.txt
 COPY app-server app-server
 
+RUN apk --update add py-gunicorn
+
 RUN pip install -r requirements.txt
 
 WORKDIR app-server
