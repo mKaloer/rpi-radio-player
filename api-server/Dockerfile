@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt
 
 WORKDIR api-server
 
-CMD gunicorn -w 4 -b 0.0.0.0:8080 api:app
+CMD gunicorn --threads 4 -b 0.0.0.0:8080 api:app
