@@ -8,6 +8,8 @@ import radiomessages_pb2_grpc
 import radiomessages_pb2
 import radio
 
+logger = logging.getLogger(__name__)
+
 class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 
@@ -23,20 +25,21 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 
     def Play(self, request, context):
+        logger.info("Received play request. Url: %s", request.url)
         if not request.url:
             if self._curr_url:
                 # Get last URL
                 url = self._curr_url
-                logging.debug("Play prev url: %s", url)
+                logger.debug("Play prev url: %s", url)
             else:
                 # No known url
-                logging.debug("Play requested, but no URL to play")
+                logger.debug("Play requested, but no URL to play")
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 context.set_details("No URL to play")
                 return radiomessages_pb2.StatusResponse()
         else:
             url = request.url
-            logging.debug("Play new url: %s", url)
+            logger.debug("Play new url: %s", url)
 
         self._curr_url = url
         self._curr_state = RadioServicer.STATE_PLAYING
@@ -46,14 +49,14 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 
     def Stop(self, request, context):
-        logging.debug("Stopping")
+        logger.info("Received stop request")
         self._curr_state = RadioServicer.STATE_STOPPED
         self.radio.stop()
         return self._get_status()
 
 
     def Status(self, request, context):
-        logging.debug("Status requested")
+        logger.info("Received status request")
         return self._get_status()
 
 
@@ -62,11 +65,13 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 
 def serve():
+    logging.info("Creating grpc server")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     radiomessages_pb2_grpc.add_RadioServicer_to_server(
         RadioServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
+    logging.info("grpc server started")
     while True:
         time.sleep(10000)
 

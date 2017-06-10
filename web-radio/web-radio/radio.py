@@ -2,15 +2,19 @@ import logging
 
 from mpd import MPDClient, ConnectionError
 
+logger = logging.getLogger(__name__)
+
 def autoconnect():
     def autoconnect_decorator(func):
         def func_wrapper(self, *args, **kwargs):
             try:
                 self._player.ping()
             except BrokenPipeError:
+                logger.warning("Broken pipe: Recreating client")
                 self._player = MPDClient()
                 self._connect()
             except ConnectionError:
+                logger.warning("Connection error: Reconnecting...")
                 self._connect()
             return func(self, *args, **kwargs)
         return func_wrapper
@@ -27,6 +31,7 @@ class Radio():
 
     @autoconnect()
     def play_url(self, url):
+        logger.info("Playing URL: %s", url)
         self._player.clear()
         self._player.load(url)
         self._player.play(0)
@@ -34,14 +39,17 @@ class Radio():
 
     @autoconnect()
     def play(self):
+        logger.info("Playing")
         self._player.pause(0)
 
 
     @autoconnect()
     def pause(self):
+        logger.info("Pausing")
         self._player.pause(1)
 
 
     @autoconnect()
     def stop(self):
+        logger.info("Stopping")
         self._player.stop()
