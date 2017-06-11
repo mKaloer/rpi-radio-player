@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, abort, make_response
 import flask_sqlalchemy
 import flask_restless
+from flask_cors import CORS
 from sqlalchemy import func
 
 import config
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 db = flask_sqlalchemy.SQLAlchemy(app)
+CORS(app)
 
 radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
 
