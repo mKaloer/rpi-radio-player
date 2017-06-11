@@ -1,0 +1,17 @@
+<div id="player-card" class="col s12 m6 l4">
+  <div class="card grey lighten-4">
+    <div class="card-content">
+      <span class="card-title">{ radio.status.station.name }</span>
+      { radio.status.station.details }
+    </div>
+    <div class="card-action center">
+      <p class="range-field">
+	<input type="range" id="volume-slider" min="0" max="100" />
+	<label for="volume-slider">Volume</label>
+      </p>
+      <button id="player-btn-play-pause" class="btn-floating waves-effect waves-light orange darken-4">
+	<i class="material-icons">{ radio.status.state | play_btn }</i>
+      </button>
+    </div>
+  </div>
+</div>

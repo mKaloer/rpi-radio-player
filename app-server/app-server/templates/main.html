@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row" >
+  {% include "cards/player_card.html" %}
+  {% include "cards/favorites_card.html" %}
+</div>
+<div class="row" >
+  {% include "cards/add_station_card.html" %}
+  {% include "cards/stations_card.html" %}
+</div>
+{% endblock %}
