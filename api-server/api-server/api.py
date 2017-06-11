@@ -35,7 +35,7 @@ db.create_all()
 
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
-manager.create_api(Station, methods=['GET', 'POST', 'DELETE'], url_prefix=config.URL_PREFIX)
+manager.create_api(Station, methods=['GET', 'POST', 'PUT', 'DELETE'], url_prefix=config.URL_PREFIX)
 manager.create_api(Log, methods=['GET'], url_prefix=config.URL_PREFIX)
 
 @app.route("/play", methods=['POST'])
@@ -46,7 +46,7 @@ def play():
         app.logger.debug("Play url: %s", url)
     elif station_id:
         app.logger.debug("Play station: %s", station_id)
-        url = Station.query.get(station_id)
+        url = Station.query.get(station_id).url
         if not url:
             _abort_json(404, message='Station with id {} does not exist'.format(station_id))
     try:
