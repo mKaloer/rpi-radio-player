@@ -10,6 +10,7 @@ import radio_rpc
 app = Flask(__name__)
 app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = flask_sqlalchemy.SQLAlchemy(app)
 CORS(app)
 

@@ -5,7 +5,7 @@ MAINTAINER Mads Kalør "mads@kaloer.com"
 COPY requirements.txt requirements.txt
 COPY api-server api-server
 
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat gcc python3-dev musl-dev linux-headers
 
 RUN pip install -r requirements.txt
 
