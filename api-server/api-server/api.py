@@ -47,14 +47,16 @@ def play():
         app.logger.debug("Play url: %s", url)
     elif station_id:
         app.logger.debug("Play station: %s", station_id)
-        url = Station.query.get(station_id).url
-        if not url:
+        station = Station.query.get(station_id)
+        if not station:
             _abort_json(404, message='Station with id {} does not exist'.format(station_id))
+        url = station.url
     try:
         status = radio.play(url)
         return _format_status(status)
     except ValueError as e:
         _abort_json(400, message=str(e))
+
 
 @app.route("/stop", methods=['POST'])
 def stop():

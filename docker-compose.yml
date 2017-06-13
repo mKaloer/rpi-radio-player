@@ -9,8 +9,7 @@ services:
     container_name: rpi-radio-api
     expose:
       - "50051" # gRPC
-    ports:
-      - "8081:8080"
+      - "8080"
     depends_on:
       - db
 
@@ -29,8 +28,19 @@ services:
       context: ./app-server
     restart: always
     container_name: rpi-radio-app
+    expose:
+      - "8080"
+
+  nginx:
+    build:
+      context: ./nginx
+    restart: always
+    container_name: rpi-radio-nginx
     ports:
-      - "8082:8080"
+      - "80:80"
+    depends_on:
+      - app-server
+      - api-server
 
   db:
     image: tobi312/rpi-postgresql

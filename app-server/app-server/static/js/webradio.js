@@ -5,7 +5,7 @@ _send_request = function(obj, endpoint, params, callback, type = "GET", data = n
 	var param_list = '?' + $.param(params);
     }
 
-    var url = "http://192.168.1.108:8081/" + endpoint + param_list
+    var url = "http://192.168.1.108/api/" + endpoint + param_list
 
     var callback_curry = function(data) {
 	callback(obj, data);
