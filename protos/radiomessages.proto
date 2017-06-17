@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 
 message PlayRequest {
-    optional string url = 1;
+    string url = 1;
 }
 
 message StatusResponse {
@@ -14,10 +14,19 @@ message StatusResponse {
         MUTED = 2;
     }
     State state = 2;
+    string title = 3;
+    string name = 4;
+    int32 volume = 5;
+    int32 bitrate = 6;
 }
 
 service Radio {
     rpc Play (PlayRequest) returns (StatusResponse);
     rpc Stop (google.protobuf.Empty) returns (StatusResponse);
     rpc Status (google.protobuf.Empty) returns (StatusResponse);
+    rpc SubscribeToUpdates (google.protobuf.Empty) returns (StatusResponse);
+}
+
+service RadioListener {
+    rpc StatusUpdated (StatusResponse) returns (google.protobuf.Empty);
 }

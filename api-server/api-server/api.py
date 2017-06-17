@@ -73,7 +73,11 @@ def radio_status():
 def _format_status(status):
     return jsonify({
         'url': status['url'],
-        'state': status['state'].name
+        'state': status['state'].name,
+        'title': status['title'],
+        'name': status['name'],
+        'volume': status['volume'],
+        'bitrate': status['bitrate'],
     })
 
 def _abort_json(err_code, message):

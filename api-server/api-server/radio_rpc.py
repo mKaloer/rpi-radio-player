@@ -51,7 +51,11 @@ class RadioRPC():
         """
         return {
             'url': status.url,
-            'state': RadioState(status.state)
+            'state': RadioState(status.state),
+            'title': status.title,
+            'name': status.name,
+            'volume': status.volume,
+            'bitrate': status.bitrate,
         }
 
 

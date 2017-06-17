@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='radiomessages.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x13radiomessages.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x1a\n\x0bPlayRequest\x12\x0b\n\x03url\x18\x01 \x01(\t\"q\n\x0eStatusResponse\x12\x0b\n\x03url\x18\x01 \x01(\t\x12$\n\x05state\x18\x02 \x01(\x0e\x32\x15.StatusResponse.State\",\n\x05State\x12\x0b\n\x07PLAYING\x10\x00\x12\x0b\n\x07STOPPED\x10\x01\x12\t\n\x05MUTED\x10\x02\x32\x92\x01\n\x05Radio\x12%\n\x04Play\x12\x0c.PlayRequest\x1a\x0f.StatusResponse\x12/\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12\x31\n\x06Status\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponseb\x06proto3')
+  serialized_pb=_b('\n\x13radiomessages.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x1a\n\x0bPlayRequest\x12\x0b\n\x03url\x18\x01 \x01(\t\"\xaf\x01\n\x0eStatusResponse\x12\x0b\n\x03url\x18\x01 \x01(\t\x12$\n\x05state\x18\x02 \x01(\x0e\x32\x15.StatusResponse.State\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06volume\x18\x05 \x01(\x05\x12\x0f\n\x07\x62itrate\x18\x06 \x01(\x05\",\n\x05State\x12\x0b\n\x07PLAYING\x10\x00\x12\x0b\n\x07STOPPED\x10\x01\x12\t\n\x05MUTED\x10\x02\x32\xd1\x01\n\x05Radio\x12%\n\x04Play\x12\x0c.PlayRequest\x1a\x0f.StatusResponse\x12/\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12\x31\n\x06Status\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12=\n\x12SubscribeToUpdates\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse2I\n\rRadioListener\x12\x38\n\rStatusUpdated\x12\x0f.StatusResponse\x1a\x16.google.protobuf.Emptyb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -48,8 +48,8 @@ _STATUSRESPONSE_STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=149,
-  serialized_end=193,
+  serialized_start=212,
+  serialized_end=256,
 )
 _sym_db.RegisterEnumDescriptor(_STATUSRESPONSE_STATE)
 
@@ -106,6 +106,34 @@ _STATUSRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='StatusResponse.title', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='StatusResponse.name', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='volume', full_name='StatusResponse.volume', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='bitrate', full_name='StatusResponse.bitrate', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -119,8 +147,8 @@ _STATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=80,
-  serialized_end=193,
+  serialized_start=81,
+  serialized_end=256,
 )
 
 _STATUSRESPONSE.fields_by_name['state'].enum_type = _STATUSRESPONSE_STATE
@@ -176,6 +204,11 @@ try:
           request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
           response_deserializer=StatusResponse.FromString,
           )
+      self.SubscribeToUpdates = channel.unary_unary(
+          '/Radio/SubscribeToUpdates',
+          request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+          response_deserializer=StatusResponse.FromString,
+          )
 
 
   class RadioServicer(object):
@@ -191,6 +224,11 @@ try:
       raise NotImplementedError('Method not implemented!')
 
     def Status(self, request, context):
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def SubscribeToUpdates(self, request, context):
       context.set_code(grpc.StatusCode.UNIMPLEMENTED)
       context.set_details('Method not implemented!')
       raise NotImplementedError('Method not implemented!')
@@ -213,9 +251,50 @@ try:
             request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             response_serializer=StatusResponse.SerializeToString,
         ),
+        'SubscribeToUpdates': grpc.unary_unary_rpc_method_handler(
+            servicer.SubscribeToUpdates,
+            request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            response_serializer=StatusResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
         'Radio', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+  class RadioListenerStub(object):
+
+    def __init__(self, channel):
+      """Constructor.
+
+      Args:
+        channel: A grpc.Channel.
+      """
+      self.StatusUpdated = channel.unary_unary(
+          '/RadioListener/StatusUpdated',
+          request_serializer=StatusResponse.SerializeToString,
+          response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          )
+
+
+  class RadioListenerServicer(object):
+
+    def StatusUpdated(self, request, context):
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+
+  def add_RadioListenerServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+        'StatusUpdated': grpc.unary_unary_rpc_method_handler(
+            servicer.StatusUpdated,
+            request_deserializer=StatusResponse.FromString,
+            response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+        'RadioListener', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -230,6 +309,8 @@ try:
     def Stop(self, request, context):
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def Status(self, request, context):
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def SubscribeToUpdates(self, request, context):
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
 
 
@@ -248,6 +329,9 @@ try:
     def Status(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
       raise NotImplementedError()
     Status.future = None
+    def SubscribeToUpdates(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      raise NotImplementedError()
+    SubscribeToUpdates.future = None
 
 
   def beta_create_Radio_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
@@ -260,16 +344,19 @@ try:
       ('Radio', 'Play'): PlayRequest.FromString,
       ('Radio', 'Status'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
       ('Radio', 'Stop'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+      ('Radio', 'SubscribeToUpdates'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
     }
     response_serializers = {
       ('Radio', 'Play'): StatusResponse.SerializeToString,
       ('Radio', 'Status'): StatusResponse.SerializeToString,
       ('Radio', 'Stop'): StatusResponse.SerializeToString,
+      ('Radio', 'SubscribeToUpdates'): StatusResponse.SerializeToString,
     }
     method_implementations = {
       ('Radio', 'Play'): face_utilities.unary_unary_inline(servicer.Play),
       ('Radio', 'Status'): face_utilities.unary_unary_inline(servicer.Status),
       ('Radio', 'Stop'): face_utilities.unary_unary_inline(servicer.Stop),
+      ('Radio', 'SubscribeToUpdates'): face_utilities.unary_unary_inline(servicer.SubscribeToUpdates),
     }
     server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
     return beta_implementations.server(method_implementations, options=server_options)
@@ -285,19 +372,81 @@ try:
       ('Radio', 'Play'): PlayRequest.SerializeToString,
       ('Radio', 'Status'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
       ('Radio', 'Stop'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ('Radio', 'SubscribeToUpdates'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
     }
     response_deserializers = {
       ('Radio', 'Play'): StatusResponse.FromString,
       ('Radio', 'Status'): StatusResponse.FromString,
       ('Radio', 'Stop'): StatusResponse.FromString,
+      ('Radio', 'SubscribeToUpdates'): StatusResponse.FromString,
     }
     cardinalities = {
       'Play': cardinality.Cardinality.UNARY_UNARY,
       'Status': cardinality.Cardinality.UNARY_UNARY,
       'Stop': cardinality.Cardinality.UNARY_UNARY,
+      'SubscribeToUpdates': cardinality.Cardinality.UNARY_UNARY,
     }
     stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)
     return beta_implementations.dynamic_stub(channel, 'Radio', cardinalities, options=stub_options)
+
+
+  class BetaRadioListenerServicer(object):
+    """The Beta API is deprecated for 0.15.0 and later.
+
+    It is recommended to use the GA API (classes and functions in this
+    file not marked beta) for all further purposes. This class was generated
+    only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0."""
+    def StatusUpdated(self, request, context):
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+
+
+  class BetaRadioListenerStub(object):
+    """The Beta API is deprecated for 0.15.0 and later.
+
+    It is recommended to use the GA API (classes and functions in this
+    file not marked beta) for all further purposes. This class was generated
+    only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0."""
+    def StatusUpdated(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      raise NotImplementedError()
+    StatusUpdated.future = None
+
+
+  def beta_create_RadioListener_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
+    """The Beta API is deprecated for 0.15.0 and later.
+
+    It is recommended to use the GA API (classes and functions in this
+    file not marked beta) for all further purposes. This function was
+    generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
+    request_deserializers = {
+      ('RadioListener', 'StatusUpdated'): StatusResponse.FromString,
+    }
+    response_serializers = {
+      ('RadioListener', 'StatusUpdated'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+    }
+    method_implementations = {
+      ('RadioListener', 'StatusUpdated'): face_utilities.unary_unary_inline(servicer.StatusUpdated),
+    }
+    server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
+    return beta_implementations.server(method_implementations, options=server_options)
+
+
+  def beta_create_RadioListener_stub(channel, host=None, metadata_transformer=None, pool=None, pool_size=None):
+    """The Beta API is deprecated for 0.15.0 and later.
+
+    It is recommended to use the GA API (classes and functions in this
+    file not marked beta) for all further purposes. This function was
+    generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
+    request_serializers = {
+      ('RadioListener', 'StatusUpdated'): StatusResponse.SerializeToString,
+    }
+    response_deserializers = {
+      ('RadioListener', 'StatusUpdated'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+    }
+    cardinalities = {
+      'StatusUpdated': cardinality.Cardinality.UNARY_UNARY,
+    }
+    stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)
+    return beta_implementations.dynamic_stub(channel, 'RadioListener', cardinalities, options=stub_options)
 except ImportError:
   pass
 # @@protoc_insertion_point(module_scope)

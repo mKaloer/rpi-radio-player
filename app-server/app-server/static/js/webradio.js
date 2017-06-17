@@ -27,19 +27,19 @@ function Radio() {
 	_send_request(this, 'play', {
 	    'url': url
 	}, function(radio, data) {
-
+	    radio.status = data;
 	}, "POST");
     };
     this.play_station = function(station_id) {
 	_send_request(this, 'play', {
 	    'station_id': station_id
 	}, function(radio, data) {
-
+	    radio.status = data;
 	}, "POST");
     };
     this.stop = function() {
 	_send_request(this, 'stop', {}, function(radio, data) {
-
+	    radio.status = data;
 	}, "POST");
     };
     this.get_status = function() {

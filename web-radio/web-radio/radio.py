@@ -53,3 +53,17 @@ class Radio():
     def stop(self):
         logger.info("Stopping")
         self._player.stop()
+
+
+    @autoconnect()
+    def get_status(self):
+        logger.info("Get status")
+        track_status = self._player.currentsong()
+        player_status = self._player.status()
+        return {
+            'title': track_status.get('title'),
+            'name': track_status.get('name'),
+            'volume': player_status.get('volume'),
+            'bitrate': player_status.get('bitrate'),
+            'state': player_status.get('state')
+        }

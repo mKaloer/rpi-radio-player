@@ -61,7 +61,23 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 
     def _get_status(self):
-        return radiomessages_pb2.StatusResponse(url=self._curr_url, state=self._curr_state)
+        status = self.radio.get_status()
+        return radiomessages_pb2.StatusResponse(
+            url=self._curr_url,
+            state=self._curr_state,
+            title=status['title'],
+            name=status['name'],
+            volume=RadioServicer._try_int(status['volume']),
+            bitrate=RadioServicer._try_int(status['bitrate']),
+        )
+
+
+    @staticmethod
+    def _try_int(val):
+        if val is None:
+            return None
+        else:
+            return int(val)
 
 
 def serve():
