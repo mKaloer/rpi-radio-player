@@ -24,9 +24,6 @@ service Radio {
     rpc Play (PlayRequest) returns (StatusResponse);
     rpc Stop (google.protobuf.Empty) returns (StatusResponse);
     rpc Status (google.protobuf.Empty) returns (StatusResponse);
-    rpc SubscribeToUpdates (google.protobuf.Empty) returns (StatusResponse);
-}
-
-service RadioListener {
-    rpc StatusUpdated (StatusResponse) returns (google.protobuf.Empty);
+    rpc SubscribeToUpdates (google.protobuf.Empty) returns (stream StatusResponse);
+    rpc UnsubscribeToUpdates (google.protobuf.Empty) returns (google.protobuf.Empty);
 }

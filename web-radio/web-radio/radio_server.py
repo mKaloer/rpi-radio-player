@@ -1,8 +1,10 @@
 from concurrent import futures
 import logging
 import time
+import queue
 
 import grpc
+from google.protobuf import empty_pb2
 
 import radiomessages_pb2_grpc
 import radiomessages_pb2
@@ -22,7 +24,8 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
     def __init__(self):
         self.radio = radio.Radio()
-
+        self.event_queues = {}
+        self.radio.register_event_listener(self._on_status_updated)
 
     def Play(self, request, context):
         logger.info("Received play request. Url: %s", request.url)
@@ -60,8 +63,39 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
         return self._get_status()
 
 
+    def SubscribeToUpdates(self, request, context):
+        logger.info("Received status subscription")
+        q = queue.Queue()
+        self.event_queues[context.peer()] = q
+
+        while True:
+            status = q.get()
+            if status is None:
+                break
+            yield self._format_status(status)
+            q.task_done()
+
+        del self.event_queues[context.peer()]
+
+
+    def UnsubscribeToUpdates(self, request, context):
+        q = self.event_queues[context.peer()]
+        q.put(None)
+        q.join()
+        return empty_pb2.Empty()
+
+
+    def _on_status_updated(self, status):
+        for q in self.event_queues.values():
+            q.put(status)
+
+
     def _get_status(self):
         status = self.radio.get_status()
+        return self._format_status(status)
+
+
+    def _format_status(self, status):
         return radiomessages_pb2.StatusResponse(
             url=self._curr_url,
             state=self._curr_state,
@@ -82,7 +116,7 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
 
 def serve():
     logging.info("Creating grpc server")
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=100))
     radiomessages_pb2_grpc.add_RadioServicer_to_server(
         RadioServicer(), server)
     server.add_insecure_port('[::]:50051')

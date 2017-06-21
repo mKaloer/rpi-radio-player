@@ -28,10 +28,15 @@ class RadioStub(object):
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=radiomessages__pb2.StatusResponse.FromString,
         )
-    self.SubscribeToUpdates = channel.unary_unary(
+    self.SubscribeToUpdates = channel.unary_stream(
         '/Radio/SubscribeToUpdates',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=radiomessages__pb2.StatusResponse.FromString,
+        )
+    self.UnsubscribeToUpdates = channel.unary_unary(
+        '/Radio/UnsubscribeToUpdates',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
         )
 
 
@@ -57,6 +62,11 @@ class RadioServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def UnsubscribeToUpdates(self, request, context):
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_RadioServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -75,48 +85,17 @@ def add_RadioServicer_to_server(servicer, server):
           request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
           response_serializer=radiomessages__pb2.StatusResponse.SerializeToString,
       ),
-      'SubscribeToUpdates': grpc.unary_unary_rpc_method_handler(
+      'SubscribeToUpdates': grpc.unary_stream_rpc_method_handler(
           servicer.SubscribeToUpdates,
           request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
           response_serializer=radiomessages__pb2.StatusResponse.SerializeToString,
       ),
-  }
-  generic_handler = grpc.method_handlers_generic_handler(
-      'Radio', rpc_method_handlers)
-  server.add_generic_rpc_handlers((generic_handler,))
-
-
-class RadioListenerStub(object):
-
-  def __init__(self, channel):
-    """Constructor.
-
-    Args:
-      channel: A grpc.Channel.
-    """
-    self.StatusUpdated = channel.unary_unary(
-        '/RadioListener/StatusUpdated',
-        request_serializer=radiomessages__pb2.StatusResponse.SerializeToString,
-        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-        )
-
-
-class RadioListenerServicer(object):
-
-  def StatusUpdated(self, request, context):
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-
-def add_RadioListenerServicer_to_server(servicer, server):
-  rpc_method_handlers = {
-      'StatusUpdated': grpc.unary_unary_rpc_method_handler(
-          servicer.StatusUpdated,
-          request_deserializer=radiomessages__pb2.StatusResponse.FromString,
+      'UnsubscribeToUpdates': grpc.unary_unary_rpc_method_handler(
+          servicer.UnsubscribeToUpdates,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
           response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'RadioListener', rpc_method_handlers)
+      'Radio', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

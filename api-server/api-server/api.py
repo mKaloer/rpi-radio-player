@@ -1,20 +1,36 @@
+import logging
+
 from flask import Flask, jsonify, request, abort, make_response
 import flask_sqlalchemy
 import flask_restless
+from flask_socketio import SocketIO
 from flask_cors import CORS
 from sqlalchemy import func
+from psycogreen.gevent import patch_psycopg
+from gevent import monkey
+import gevent
 
 import config
 import radio_rpc
+
+# Monkey patch (for gevent)
+patch_psycopg()
+if gevent.version_info[0] == 0:
+    monkey.patch_all(thread=False)
+else:
+    monkey.patch_all(thread=False, subprocess=True)
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+socketio = SocketIO(app)
 db = flask_sqlalchemy.SQLAlchemy(app)
+db.engine.pool._use_threadlocal = False
 CORS(app)
 
-radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
 
 class Station(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,12 +48,14 @@ class Log(db.Model):
     action = db.Column(db.Unicode, nullable=False)
     url = db.Column(db.Unicode, nullable=True)
 
-db.create_all()
 
-manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+@app.before_first_request
+def setup_logging():
+    if not app.debug:
+        # In production mode, add log handler to sys.stderr.
+        app.logger.addHandler(logging.StreamHandler())
+        app.logger.setLevel(logging.INFO)
 
-manager.create_api(Station, methods=['GET', 'POST', 'PUT', 'DELETE'], url_prefix=config.URL_PREFIX)
-manager.create_api(Log, methods=['GET'], url_prefix=config.URL_PREFIX)
 
 @app.route("/play", methods=['POST'])
 def play():
@@ -70,6 +88,11 @@ def radio_status():
     return _format_status(status)
 
 
+def on_status_updated(status):
+    app.logger.info("Received status update")
+    socketio.emit('status', _format_status(status), json=True, broadcast=True)
+
+
 def _format_status(status):
     return jsonify({
         'url': status['url'],
@@ -86,3 +109,14 @@ def _abort_json(err_code, message):
             'msg': message,
             'error_code': err_code
         }), err_code))
+
+
+radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
+radio.subscribe_to_updates(on_status_updated)
+
+db.create_all()
+
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+
+manager.create_api(Station, methods=['GET', 'POST', 'PUT', 'DELETE'], url_prefix=config.URL_PREFIX)
+manager.create_api(Log, methods=['GET'], url_prefix=config.URL_PREFIX)
