@@ -1,4 +1,5 @@
 import logging
+import json
 
 from flask import Flask, jsonify, request, abort, make_response
 import flask_sqlalchemy
@@ -26,7 +27,7 @@ app.config['DEBUG'] = config.DEBUG
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, ping_timeout=60)
 db = flask_sqlalchemy.SQLAlchemy(app)
 db.engine.pool._use_threadlocal = False
 CORS(app)
@@ -71,7 +72,7 @@ def play():
         url = station.url
     try:
         status = radio.play(url)
-        return _format_status(status)
+        return jsonify(_format_status(status))
     except ValueError as e:
         _abort_json(400, message=str(e))
 
@@ -79,29 +80,33 @@ def play():
 @app.route("/stop", methods=['POST'])
 def stop():
     status = radio.stop()
-    return _format_status(status)
+    return jsonify(_format_status(status))
 
 
 @app.route("/status")
 def radio_status():
     status = radio.get_status()
-    return _format_status(status)
+    return jsonify(_format_status(status))
 
 
 def on_status_updated(status):
-    app.logger.info("Received status update")
-    socketio.emit('status', _format_status(status), json=True, broadcast=True)
+    with app.app_context():
+        try:
+            app.logger.info("Received status update")
+            socketio.emit('status', _format_status(status), json=True, broadcast=True)
+        except:
+            app.logger.warning("Error handling new status", exc_info=True)
 
 
 def _format_status(status):
-    return jsonify({
+    return {
         'url': status['url'],
         'state': status['state'].name,
         'title': status['title'],
         'name': status['name'],
         'volume': status['volume'],
         'bitrate': status['bitrate'],
-    })
+    }
 
 def _abort_json(err_code, message):
     abort(make_response(jsonify(

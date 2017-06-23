@@ -50,7 +50,8 @@ class RadioRPC():
         logger.debug("Subscribing to updates")
         def async_listener():
             for status in self.stub.SubscribeToUpdates(empty_pb2.Empty()):
-                listener(RadioRPC._format_status(status))
+                if status:
+                    listener(RadioRPC._format_status(status))
 
         t = threading.Thread(target=async_listener)
         t.start()

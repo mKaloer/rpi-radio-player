@@ -1,5 +1,6 @@
 var radio = new Radio();
 var radioController = new RadioController();
+var socket = null;
 
 $(document).ready(function() {
     // Materialize CSS menu setup
@@ -23,6 +24,11 @@ $(document).ready(function() {
     rivets.bind($('#favorites-card'), {radio: radio, radioController: radioController});
     rivets.bind($('#stations-card'), {radio: radio, radioController: radioController});
     rivets.bind($('#add-station-card'), {radio: radio, radioController: radioController});
+    socket = io.connect("http://" + window.location.hostname + "/socket.io");
+    socket.nsp = "/";
+    socket.on('status', function(status) {
+	radio.status = status;
+    });
 });
 
 // Rivets formatters

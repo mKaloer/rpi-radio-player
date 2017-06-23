@@ -3,9 +3,10 @@ FROM mielune/alpine-python3-arm
 MAINTAINER Mads Kalør "mads@kaloer.com"
 
 COPY requirements.txt requirements.txt
-COPY app-server app-server
 
 RUN pip install -r requirements.txt
+
+COPY app-server app-server
 
 WORKDIR app-server
 
