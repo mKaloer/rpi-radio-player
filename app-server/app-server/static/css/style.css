@@ -1,3 +1,8 @@
+/*
+  Color palette:
+  https://material.io/color/#!/?view.left=0&view.right=0&secondary.color=1565C0&primary.color=FF5722
+*/
+
 @media only screen and (min-width: 601px) {
     nav .brand-logo {
 	margin-left: 15px;
@@ -7,4 +12,35 @@
 .now-playing {
     min-height: 3em;
     display: block;
+}
+
+.brand-logo {
+    font-weight: 300;
+}
+
+input[type=range]+.thumb {
+    background-color: #1565c0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    background-color: #1565c0;
+}
+
+input[type=range]::-ms-thumb {
+    background-color: #1565c0;
+}
+
+input[type=range]::-moz-range-thumb {
+    background-color: #1565c0;
+}
+
+
+/* label focus color */
+.input-field input[type=text]:focus + label {
+    color: #1565c0;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #1565c0;
+    box-shadow: 0 1px 0 0 #000;
 }

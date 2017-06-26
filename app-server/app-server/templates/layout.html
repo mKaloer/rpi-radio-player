@@ -13,6 +13,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#c41c00" />
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon.png') }}"/>
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_for('static', filename='img/icon.png') }}">
 
@@ -21,20 +22,20 @@
   </head>
 
   <body class="grey lighten-2">
-
-    <nav>
-      <div class="nav-wrapper teal">
-	<a href="#" class="brand-logo">RadioRemote</a>
-	<a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
-	<ul id="nav-mobile" class="right hide-on-med-and-down">
-	  <li><a href="/">Home</a></li>
-	</ul>
-	<ul class="side-nav" id="mobile-menu">
-	  <li><a href="/">Home</a></li>
-	</ul>
-      </div>
-       </nav>
-
+    <div class="navbar-fixed">
+      <nav>
+	<div class="nav-wrapper deep-orange lighten-1">
+	  <a href="/" class="brand-logo">RadioRemote</a>
+	  <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+	  <ul id="nav-mobile" class="right hide-on-med-and-down">
+	    <li><a href="/">Home</a></li>
+	  </ul>
+	  <ul class="side-nav" id="mobile-menu">
+	    <li><a href="/">Home</a></li>
+	  </ul>
+	</div>
+      </nav>
+    </div>
     {% for message in get_flashed_messages() %}
     <script type="text/javascript">
       Materialize.toast('{{ message }}', 4000)
