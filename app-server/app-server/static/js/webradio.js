@@ -93,6 +93,14 @@ function RadioController() {
 	var radio = view.radio;
 	radio.play_station(station.id);
     };
+    this.play_pause_current = function(e, view) {
+	var radio = view.radio;
+	if (radio.status.state === "PLAYING") {
+	    radio.stop();
+	} else {
+	    radio.play_url(radio.status.url);
+	}
+    };
     this.stop = function(e, view) {
 	var radio = view.radio;
 	radio.stop();

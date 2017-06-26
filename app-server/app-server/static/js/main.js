@@ -6,13 +6,6 @@ $(document).ready(function() {
     // Materialize CSS menu setup
     $(".button-collapse").sideNav();
 
-    $("#player-btn-play-pause").click(function() {
-	if (radio.status.state === "PLAYING") {
-	    radio.stop();
-	} else {
-	    radio.play_station(0);
-	}
-    });
     $("#add-station-form").submit(function(e) {
 	var name = $(this).find("#add-station-name")[0].value;
 	var url = $(this).find("#add-station-url")[0].value;
