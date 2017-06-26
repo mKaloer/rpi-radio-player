@@ -10,7 +10,8 @@
 	  <span class="title">{ station.name }</span>
 	  <p>First Line<br />Second line</p>
 	  <button class="secondary-content btn-flat favorite-station-btn" rv-on-click="radioController.set_favorite">
-	    <i class="material-icons orange-text text-darken-4">{ station.is_favorite | favorite_icon }</i>
+	    <i class="material-icons orange-text text-darken-4" rv-show="station.is_favorite">favorite</i>
+	    <i class="material-icons orange-text text-darken-4" rv-hide="station.is_favorite">favorite_border</i>
 	  </button>
 	</li>
       </ul>

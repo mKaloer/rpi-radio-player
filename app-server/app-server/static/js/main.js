@@ -25,17 +25,26 @@ $(document).ready(function() {
 });
 
 // Rivets formatters
-rivets.formatters.play_btn = function(value){
-    if (value === "PLAYING") {
-	return "pause_circle_filled"
+rivets.formatters.station_name = function(status){
+    if (status.name) {
+	return status.name;
     } else {
-	return "play_circle_filled"
+	if (status.state == "PLAYING") {
+	    return "Unknown name";
+	} else {
+	    return "Not playing";
+	}
     }
 }
-rivets.formatters.favorite_icon = function(value){
-    if (value === true) {
-	return "favorite"
-    } else {
-	return "favorite_border"
-    }
-}
+
+rivets.formatters.negate = function(value) {
+    return !value;
+};
+
+rivets.formatters.eq = function(value, args) {
+    return value === args;
+};
+
+rivets.formatters.neq = function(value, args) {
+    return value != args;
+};

@@ -3,3 +3,8 @@
 	margin-left: 15px;
     }
 }
+
+.now-playing {
+    min-height: 3em;
+    display: block;
+}
