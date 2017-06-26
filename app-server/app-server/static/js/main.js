@@ -22,6 +22,18 @@ $(document).ready(function() {
     socket.on('status', function(status) {
 	radio.status = status;
     });
+    socket.on('favorite', function(station) {
+	// Update stations list
+	existing_station = radio.stations.filter(function (s) { return s.id === station.id; })[0];
+	if (station.is_favorite && !existing_station.is_favorite) {
+	    // Add to list
+	    radio.favorites.push(existing_station);
+	} else if (!station.is_favorite && existing_station.is_favorite) {
+	    // Remove from list
+	    radio.favorites.splice(radio.favorites.indexOf(existing_station),1);
+	}
+	existing_station.is_favorite = station.is_favorite;
+    });
 });
 
 // Rivets formatters

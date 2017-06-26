@@ -6,7 +6,7 @@ import flask_sqlalchemy
 import flask_restless
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from sqlalchemy import func
+from sqlalchemy import func, event
 from psycogreen.gevent import patch_psycopg
 from gevent import monkey
 import gevent
@@ -97,6 +97,17 @@ def on_status_updated(status):
         except:
             app.logger.warning("Error handling new status", exc_info=True)
 
+def on_favorite_change(target, value, oldvalue, initiator):
+    try:
+        app.logger.info("Sending favorite change event")
+        fav_json = {
+            'id':  target.id,
+            'is_favorite': value
+        }
+        socketio.emit('favorite', fav_json, json=True, broadcast=True)
+    except:
+        app.logger.warning("Error handling favorite change", exc_info=True)
+
 
 def _format_status(status):
     return {
@@ -118,6 +129,8 @@ def _abort_json(err_code, message):
 
 radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
 radio.subscribe_to_updates(on_status_updated)
+
+event.listen(Station.is_favorite, 'set', on_favorite_change)
 
 db.create_all()
 
