@@ -50,23 +50,7 @@ function Radio() {
     this.get_stations = function() {
 	_send_request(this, 'station', {}, function(radio, data) {
 	    radio.stations = data.objects;
-	}, "GET");
-    };
-    this.get_favorites = function() {
-	var query = {
-	    "filters": [
-		{
-		    "name": "is_favorite",
-		    "op": "==",
-		    "val": true
-		}
-	    ]
-	};
-	var params = {
-	    "q": JSON.stringify(query)
-	};
-	_send_request(this, 'station', params, function(radio, data) {
-	    radio.favorites = data.objects;
+	    radio.favorites = radio.stations.filter(function(s) { return s.is_favorite; });
 	}, "GET");
     };
     this.add_station = function(name, url) {
@@ -79,11 +63,9 @@ function Radio() {
     };
 
     this.status = {};
-    this.favorites = [];
     this.stations = [];
-
+    this.favorites = [];
     this.get_status();
-    this.get_favorites();
     this.get_stations();
 };
 
@@ -111,5 +93,14 @@ function RadioController() {
 	}, "PUT", {
 	    "is_favorite": !station.is_favorite,
 	});
+	if (station.is_favorite) {
+	    // Remove station from favorites list
+	    radio.favorites.splice(radio.favorites.indexOf(station),1);
+	    station.is_favorite = false;
+	} else {
+	    // Add station from favorites list
+	    radio.favorites.push(station);
+	    station.is_favorite = true;
+	}
     };
 };
