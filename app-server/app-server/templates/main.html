@@ -2,10 +2,14 @@
 {% block content %}
 <div class="row" >
   {% include "cards/player_card.html" %}
-  {% include "cards/favorites_card.html" %}
+  {% with card_title="Favorites", card_list="radio.favorites" %}
+    {% include "cards/stations_card.html" %}
+  {% endwith %}
 </div>
 <div class="row" >
   {% include "cards/add_station_card.html" %}
-  {% include "cards/stations_card.html" %}
+  {% with card_title="Stations", card_list="radio.stations" %}
+    {% include "cards/stations_card.html" %}
+  {% endwith %}
 </div>
 {% endblock %}

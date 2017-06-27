@@ -14,8 +14,7 @@ $(document).ready(function() {
     });
 
     rivets.bind($('#player-card'), {radio: radio, radioController: radioController});
-    rivets.bind($('#favorites-card'), {radio: radio, radioController: radioController});
-    rivets.bind($('#stations-card'), {radio: radio, radioController: radioController});
+    rivets.bind($('.stations-card'), {radio: radio, radioController: radioController});
     rivets.bind($('#add-station-card'), {radio: radio, radioController: radioController});
     socket = io.connect("http://" + window.location.hostname + "/socket.io");
     socket.nsp = "/";

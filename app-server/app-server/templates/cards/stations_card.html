@@ -1,9 +1,9 @@
-<div id="stations-card" class="col s12 m6 l8">
+<div class="col s12 m6 l8 stations-card">
   <div class="card grey lighten-4">
     <div class="card-content">
-      <span class="card-title">Stations</span>
+      <span class="card-title">{{ card_title }}</span>
       <ul class="collection">
-	<li class="collection-item avatar" rv-each-station="radio.stations" rv-data-station="station.id">
+	<li class="collection-item avatar" rv-each-station="{{ card_list }}" rv-data-station="station.id">
 	  <button class="circle btn-floating waves-effect waves-light blue darken-3 play-station-btn" rv-on-click="radioController.play_station">
 	    <i class="material-icons">playlist_play</i>
 	  </button>
