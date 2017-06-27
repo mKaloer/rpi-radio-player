@@ -48,13 +48,13 @@ function Radio() {
 	}, "GET");
     };
     this.get_stations = function() {
-	_send_request(this, 'station', {}, function(radio, data) {
-	    radio.stations = data.objects;
+	_send_request(this, 'stations', {}, function(radio, data) {
+	    radio.stations = data;
 	    radio.favorites = radio.stations.filter(function(s) { return s.is_favorite; });
 	}, "GET");
     };
     this.add_station = function(name, url) {
-	_send_request(this, 'station', {}, function(radio, data) {
+	_send_request(this, 'stations', {}, function(radio, data) {
 
 	}, "POST", {
 	    "name": name,
@@ -89,8 +89,10 @@ function RadioController() {
     };
     this.set_favorite = function(e, view) {
 	var station = view.station;
-	_send_request(station, 'station/' + station.id, {}, function(station, data) {
+	_send_request(station, 'stations/' + station.id, {}, function(station, data) {
 	}, "PUT", {
+	    'name': station.name,
+	    'url': station.url,
 	    "is_favorite": !station.is_favorite,
 	});
 	if (station.is_favorite) {

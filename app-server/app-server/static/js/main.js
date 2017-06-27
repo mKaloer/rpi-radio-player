@@ -6,13 +6,6 @@ $(document).ready(function() {
     // Materialize CSS menu setup
     $(".button-collapse").sideNav();
 
-    $("#add-station-form").submit(function(e) {
-	var name = $(this).find("#add-station-name")[0].value;
-	var url = $(this).find("#add-station-url")[0].value;
-	radio.add_station(name, url);
-	e.preventDefault();
-    });
-
     rivets.bind($('#player-card'), {radio: radio, radioController: radioController});
     rivets.bind($('.stations-card'), {radio: radio, radioController: radioController});
     rivets.bind($('#add-station-card'), {radio: radio, radioController: radioController});
@@ -21,17 +14,22 @@ $(document).ready(function() {
     socket.on('status', function(status) {
 	radio.status = status;
     });
-    socket.on('favorite', function(station) {
+    socket.on('station', function(station) {
 	// Update stations list
 	existing_station = radio.stations.filter(function (s) { return s.id === station.id; })[0];
-	if (station.is_favorite && !existing_station.is_favorite) {
-	    // Add to list
-	    radio.favorites.push(existing_station);
-	} else if (!station.is_favorite && existing_station.is_favorite) {
-	    // Remove from list
-	    radio.favorites.splice(radio.favorites.indexOf(existing_station),1);
+	if (!existing_station) {
+	    // Station does not exist. Update list.
+	    radio.get_stations();
+	} else {
+	    if (station.is_favorite && !existing_station.is_favorite) {
+		// Add to list
+		radio.favorites.push(existing_station);
+	    } else if (!station.is_favorite && existing_station.is_favorite) {
+		// Remove from list
+		radio.favorites.splice(radio.favorites.indexOf(existing_station),1);
+	    }
+	    existing_station.is_favorite = station.is_favorite;
 	}
-	existing_station.is_favorite = station.is_favorite;
     });
 });
 

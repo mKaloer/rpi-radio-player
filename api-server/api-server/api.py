@@ -2,8 +2,7 @@ import logging
 import json
 
 from flask import Flask, jsonify, request, abort, make_response
-import flask_sqlalchemy
-import flask_restless
+from flask_restful import Resource, Api, marshal
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from sqlalchemy import func, event
@@ -13,6 +12,9 @@ import gevent
 
 import config
 import radio_rpc
+from models import Station
+import resources
+import db
 
 # Monkey patch (for gevent)
 patch_psycopg()
@@ -24,30 +26,11 @@ else:
 
 app = Flask(__name__)
 app.config['DEBUG'] = config.DEBUG
-app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_PATH
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 socketio = SocketIO(app, ping_timeout=60)
-db = flask_sqlalchemy.SQLAlchemy(app)
-db.engine.pool._use_threadlocal = False
 CORS(app)
-
-
-class Station(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Unicode, unique=True, nullable=False)
-    url = db.Column(db.Unicode, unique=True, nullable=False)
-    is_favorite = db.Column(db.Boolean, nullable=False, default=False)
-
-
-class Log(db.Model):
-    """
-    Log item for persistent logging of mayor actions.
-    """
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
-    action = db.Column(db.Unicode, nullable=False)
-    url = db.Column(db.Unicode, nullable=True)
 
 
 @app.before_first_request
@@ -66,7 +49,7 @@ def play():
         app.logger.debug("Play url: %s", url)
     elif station_id:
         app.logger.debug("Play station: %s", station_id)
-        station = Station.query.get(station_id)
+        station = db.session.query(Station).filter(Station.id == station_id).first()
         if not station:
             _abort_json(404, message='Station with id {} does not exist'.format(station_id))
         url = station.url
@@ -83,40 +66,27 @@ def stop():
     return jsonify(_format_status(status))
 
 
-@app.route("/status")
-def radio_status():
-    status = radio.get_status()
-    return jsonify(_format_status(status))
-
-
 def on_status_updated(status):
     with app.app_context():
         try:
-            app.logger.info("Received status update")
+            app.logger.debug("Received status update")
             socketio.emit('status', _format_status(status), json=True, broadcast=True)
         except:
             app.logger.warning("Error handling new status", exc_info=True)
 
-def on_favorite_change(target, value, oldvalue, initiator):
+
+@event.listens_for(Station, 'before_update')
+def on_favorite_change(mapper, connection, target):
     try:
-        app.logger.info("Sending favorite change event")
-        fav_json = {
-            'id':  target.id,
-            'is_favorite': value
-        }
-        socketio.emit('favorite', fav_json, json=True, broadcast=True)
+        app.logger.info("Sending station change event")
+        fav_json = marshal(target, resources.station_fields)
+        socketio.emit('station', fav_json, json=True, broadcast=True)
     except:
-        app.logger.warning("Error handling favorite change", exc_info=True)
+        app.logger.warning("Error handling station change", exc_info=True)
+
 
 def _format_status(status):
-    return {
-        'url': status['url'],
-        'state': status['state'].name,
-        'title': status['title'],
-        'name': status['name'],
-        'volume': status['volume'],
-        'bitrate': status['bitrate'],
-    }
+    return marshal(status, resources.status_fields)
 
 def _abort_json(err_code, message):
     abort(make_response(jsonify(
@@ -129,11 +99,11 @@ def _abort_json(err_code, message):
 radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
 radio.subscribe_to_updates(on_status_updated)
 
-event.listen(Station.is_favorite, 'set', on_favorite_change)
+api = Api(app)
+api.add_resource(resources.StationListResource, '/stations')
+api.add_resource(resources.StationResource, '/stations/<string:id>')
+api.add_resource(resources.StatusResource, '/status', resource_class_args=[radio])
 
-db.create_all()
 
-manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-
-manager.create_api(Station, methods=['GET', 'POST', 'PUT', 'DELETE'], url_prefix=config.URL_PREFIX)
-manager.create_api(Log, methods=['GET'], url_prefix=config.URL_PREFIX)
+if __name__ == "__main__":
+    app.run(host="localhost", debug=True)
