@@ -84,7 +84,6 @@ def on_favorite_change(mapper, connection, target):
     except:
         app.logger.warning("Error handling station change", exc_info=True)
 
-
 def _format_status(status):
     return marshal(status, resources.status_fields)
 
