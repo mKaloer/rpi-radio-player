@@ -103,4 +103,13 @@ function RadioController() {
 	    station.is_favorite = true;
 	}
     };
+    this.add_station = function(e, view) {
+	var radio = view.radio;
+	var name = $(this).find("#add-station-name")[0];
+	var url = $(this).find("#add-station-url")[0];
+	radio.add_station(name.value, url.value);
+	name.reset();
+	url.reset();
+	e.preventDefault();
+    };
 };

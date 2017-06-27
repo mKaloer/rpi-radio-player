@@ -108,7 +108,6 @@ def on_favorite_change(target, value, oldvalue, initiator):
     except:
         app.logger.warning("Error handling favorite change", exc_info=True)
 
-
 def _format_status(status):
     return {
         'url': status['url'],
