@@ -6,7 +6,7 @@
     </div>
     <div class="card-action center">
       <p class="range-field">
-	<input type="range" id="volume-slider" min="0" max="100" rv-value="radio.status.volume" />
+	<input type="range" id="volume-slider" min="0" max="100" rv-value="radio.status.volume" rv-on-change="radioController.change_volume" rv-on-input="radioController.change_volume" />
 	<label for="volume-slider">Volume</label>
       </p>
       <button id="player-btn-play-pause" class="btn-floating waves-effect waves-light orange darken-4" rv-on-click="radioController.play_pause_current" rv-enabled="radio.status.url">

@@ -6,6 +6,10 @@ message PlayRequest {
     string url = 1;
 }
 
+message VolumeRequest {
+    int32 volume = 1;
+}
+
 message StatusResponse {
     string url = 1;
     enum State {
@@ -24,6 +28,7 @@ service Radio {
     rpc Play (PlayRequest) returns (StatusResponse);
     rpc Stop (google.protobuf.Empty) returns (StatusResponse);
     rpc Status (google.protobuf.Empty) returns (StatusResponse);
+    rpc SetVolume (VolumeRequest) returns (StatusResponse);
     rpc SubscribeToUpdates (google.protobuf.Empty) returns (stream StatusResponse);
     rpc UnsubscribeToUpdates (google.protobuf.Empty) returns (google.protobuf.Empty);
 }

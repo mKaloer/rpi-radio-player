@@ -28,6 +28,11 @@ class RadioStub(object):
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=radiomessages__pb2.StatusResponse.FromString,
         )
+    self.SetVolume = channel.unary_unary(
+        '/Radio/SetVolume',
+        request_serializer=radiomessages__pb2.VolumeRequest.SerializeToString,
+        response_deserializer=radiomessages__pb2.StatusResponse.FromString,
+        )
     self.SubscribeToUpdates = channel.unary_stream(
         '/Radio/SubscribeToUpdates',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
@@ -53,6 +58,11 @@ class RadioServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def Status(self, request, context):
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SetVolume(self, request, context):
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -83,6 +93,11 @@ def add_RadioServicer_to_server(servicer, server):
       'Status': grpc.unary_unary_rpc_method_handler(
           servicer.Status,
           request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=radiomessages__pb2.StatusResponse.SerializeToString,
+      ),
+      'SetVolume': grpc.unary_unary_rpc_method_handler(
+          servicer.SetVolume,
+          request_deserializer=radiomessages__pb2.VolumeRequest.FromString,
           response_serializer=radiomessages__pb2.StatusResponse.SerializeToString,
       ),
       'SubscribeToUpdates': grpc.unary_stream_rpc_method_handler(

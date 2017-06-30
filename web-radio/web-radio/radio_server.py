@@ -27,9 +27,9 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
         self.event_queues = {}
         self.radio.register_event_listener(self._on_status_updated)
 
-    def Play(self, request, context):
-        logger.info("Received play request. Url: %s", request.url)
-        if not request.url:
+    def Play(self, play_request, context):
+        logger.info("Received play request. Url: %s", play_request.url)
+        if not play_request.url:
             if self._curr_url:
                 # Get last URL
                 url = self._curr_url
@@ -41,7 +41,7 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
                 context.set_details("No URL to play")
                 return radiomessages_pb2.StatusResponse()
         else:
-            url = request.url
+            url = play_request.url
             logger.debug("Play new url: %s", url)
 
         self._curr_url = url
@@ -55,6 +55,12 @@ class RadioServicer(radiomessages_pb2_grpc.RadioServicer):
         logger.info("Received stop request")
         self._curr_state = RadioServicer.STATE_STOPPED
         self.radio.stop()
+        return self._get_status()
+
+
+    def SetVolume(self, volumeRequest, context):
+        logger.info("Received set volume request")
+        self.radio.set_volume(volumeRequest.volume)
         return self._get_status()
 
 

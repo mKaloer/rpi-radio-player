@@ -66,6 +66,26 @@ def stop():
     return jsonify(_format_status(status))
 
 
+@app.route("/volume", methods=['POST'])
+def set_volume_post():
+    vol = request.args.get('vol')
+    if not vol:
+        _abort_json(400, message="Missing argument: vol")
+    elif int(vol) > 100 or int(vol) < 0:
+        _abort_json(400, message="Volume must be between 0 and 100")
+    try:
+        status = radio.set_volume(int(vol))
+        return jsonify(_format_status(status))
+    except ValueError as e:
+        _abort_json(400, message=str(e))
+
+
+@socketio.on('volume')
+def set_volume_socketio(msg):
+    app.logger.debug("Received volume change from socket")
+    radio.set_volume(int(msg['volume']))
+
+
 def on_status_updated(status):
     with app.app_context():
         try:

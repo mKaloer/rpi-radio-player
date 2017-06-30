@@ -41,6 +41,12 @@ class RadioRPC():
         return RadioRPC._format_status(self.stub.Stop(empty_pb2.Empty()))
 
 
+    def set_volume(self, volume):
+        logger.debug("Setting volume")
+        response = self.stub.SetVolume(radiomessages_pb2.VolumeRequest(volume=volume))
+        return RadioRPC._format_status(response)
+
+
     def get_status(self):
         logger.debug("Sending get status request")
         return RadioRPC._format_status(self.stub.Status(empty_pb2.Empty()))

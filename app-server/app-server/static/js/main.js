@@ -1,6 +1,6 @@
+var socket = null;
 var radio = new Radio();
 var radioController = new RadioController();
-var socket = null;
 
 $(document).ready(function() {
     // Materialize CSS menu setup
@@ -12,6 +12,10 @@ $(document).ready(function() {
     socket = io.connect("http://" + window.location.hostname + "/socket.io");
     socket.nsp = "/";
     socket.on('status', function(status) {
+	if ($('#volume-slider:active')[0]) {
+	    // Currently dragging volume. Do nothing value
+	    status.volume = radio.status.volume;
+	}
 	radio.status = status;
     });
     socket.on('station', function(station) {
@@ -31,6 +35,8 @@ $(document).ready(function() {
 	    existing_station.is_favorite = station.is_favorite;
 	}
     });
+
+    radio.socket = socket;
 });
 
 // Rivets formatters

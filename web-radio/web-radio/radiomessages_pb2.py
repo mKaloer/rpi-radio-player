@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='radiomessages.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x13radiomessages.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x1a\n\x0bPlayRequest\x12\x0b\n\x03url\x18\x01 \x01(\t\"\xaf\x01\n\x0eStatusResponse\x12\x0b\n\x03url\x18\x01 \x01(\t\x12$\n\x05state\x18\x02 \x01(\x0e\x32\x15.StatusResponse.State\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06volume\x18\x05 \x01(\x05\x12\x0f\n\x07\x62itrate\x18\x06 \x01(\x05\",\n\x05State\x12\x0b\n\x07PLAYING\x10\x00\x12\x0b\n\x07STOPPED\x10\x01\x12\t\n\x05MUTED\x10\x02\x32\x9b\x02\n\x05Radio\x12%\n\x04Play\x12\x0c.PlayRequest\x1a\x0f.StatusResponse\x12/\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12\x31\n\x06Status\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12?\n\x12SubscribeToUpdates\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse0\x01\x12\x46\n\x14UnsubscribeToUpdates\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Emptyb\x06proto3')
+  serialized_pb=_b('\n\x13radiomessages.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x1a\n\x0bPlayRequest\x12\x0b\n\x03url\x18\x01 \x01(\t\"\x1f\n\rVolumeRequest\x12\x0e\n\x06volume\x18\x01 \x01(\x05\"\xaf\x01\n\x0eStatusResponse\x12\x0b\n\x03url\x18\x01 \x01(\t\x12$\n\x05state\x18\x02 \x01(\x0e\x32\x15.StatusResponse.State\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06volume\x18\x05 \x01(\x05\x12\x0f\n\x07\x62itrate\x18\x06 \x01(\x05\",\n\x05State\x12\x0b\n\x07PLAYING\x10\x00\x12\x0b\n\x07STOPPED\x10\x01\x12\t\n\x05MUTED\x10\x02\x32\xc9\x02\n\x05Radio\x12%\n\x04Play\x12\x0c.PlayRequest\x1a\x0f.StatusResponse\x12/\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12\x31\n\x06Status\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse\x12,\n\tSetVolume\x12\x0e.VolumeRequest\x1a\x0f.StatusResponse\x12?\n\x12SubscribeToUpdates\x12\x16.google.protobuf.Empty\x1a\x0f.StatusResponse0\x01\x12\x46\n\x14UnsubscribeToUpdates\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Emptyb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -48,8 +48,8 @@ _STATUSRESPONSE_STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=212,
-  serialized_end=256,
+  serialized_start=245,
+  serialized_end=289,
 )
 _sym_db.RegisterEnumDescriptor(_STATUSRESPONSE_STATE)
 
@@ -82,6 +82,37 @@ _PLAYREQUEST = _descriptor.Descriptor(
   ],
   serialized_start=52,
   serialized_end=78,
+)
+
+
+_VOLUMEREQUEST = _descriptor.Descriptor(
+  name='VolumeRequest',
+  full_name='VolumeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='volume', full_name='VolumeRequest.volume', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=80,
+  serialized_end=111,
 )
 
 
@@ -147,13 +178,14 @@ _STATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=81,
-  serialized_end=256,
+  serialized_start=114,
+  serialized_end=289,
 )
 
 _STATUSRESPONSE.fields_by_name['state'].enum_type = _STATUSRESPONSE_STATE
 _STATUSRESPONSE_STATE.containing_type = _STATUSRESPONSE
 DESCRIPTOR.message_types_by_name['PlayRequest'] = _PLAYREQUEST
+DESCRIPTOR.message_types_by_name['VolumeRequest'] = _VOLUMEREQUEST
 DESCRIPTOR.message_types_by_name['StatusResponse'] = _STATUSRESPONSE
 
 PlayRequest = _reflection.GeneratedProtocolMessageType('PlayRequest', (_message.Message,), dict(
@@ -162,6 +194,13 @@ PlayRequest = _reflection.GeneratedProtocolMessageType('PlayRequest', (_message.
   # @@protoc_insertion_point(class_scope:PlayRequest)
   ))
 _sym_db.RegisterMessage(PlayRequest)
+
+VolumeRequest = _reflection.GeneratedProtocolMessageType('VolumeRequest', (_message.Message,), dict(
+  DESCRIPTOR = _VOLUMEREQUEST,
+  __module__ = 'radiomessages_pb2'
+  # @@protoc_insertion_point(class_scope:VolumeRequest)
+  ))
+_sym_db.RegisterMessage(VolumeRequest)
 
 StatusResponse = _reflection.GeneratedProtocolMessageType('StatusResponse', (_message.Message,), dict(
   DESCRIPTOR = _STATUSRESPONSE,
@@ -204,6 +243,11 @@ try:
           request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
           response_deserializer=StatusResponse.FromString,
           )
+      self.SetVolume = channel.unary_unary(
+          '/Radio/SetVolume',
+          request_serializer=VolumeRequest.SerializeToString,
+          response_deserializer=StatusResponse.FromString,
+          )
       self.SubscribeToUpdates = channel.unary_stream(
           '/Radio/SubscribeToUpdates',
           request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
@@ -229,6 +273,11 @@ try:
       raise NotImplementedError('Method not implemented!')
 
     def Status(self, request, context):
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def SetVolume(self, request, context):
       context.set_code(grpc.StatusCode.UNIMPLEMENTED)
       context.set_details('Method not implemented!')
       raise NotImplementedError('Method not implemented!')
@@ -261,6 +310,11 @@ try:
             request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             response_serializer=StatusResponse.SerializeToString,
         ),
+        'SetVolume': grpc.unary_unary_rpc_method_handler(
+            servicer.SetVolume,
+            request_deserializer=VolumeRequest.FromString,
+            response_serializer=StatusResponse.SerializeToString,
+        ),
         'SubscribeToUpdates': grpc.unary_stream_rpc_method_handler(
             servicer.SubscribeToUpdates,
             request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
@@ -289,6 +343,8 @@ try:
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def Status(self, request, context):
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def SetVolume(self, request, context):
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def SubscribeToUpdates(self, request, context):
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def UnsubscribeToUpdates(self, request, context):
@@ -310,6 +366,9 @@ try:
     def Status(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
       raise NotImplementedError()
     Status.future = None
+    def SetVolume(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      raise NotImplementedError()
+    SetVolume.future = None
     def SubscribeToUpdates(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
       raise NotImplementedError()
     def UnsubscribeToUpdates(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
@@ -325,6 +384,7 @@ try:
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_deserializers = {
       ('Radio', 'Play'): PlayRequest.FromString,
+      ('Radio', 'SetVolume'): VolumeRequest.FromString,
       ('Radio', 'Status'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
       ('Radio', 'Stop'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
       ('Radio', 'SubscribeToUpdates'): google_dot_protobuf_dot_empty__pb2.Empty.FromString,
@@ -332,6 +392,7 @@ try:
     }
     response_serializers = {
       ('Radio', 'Play'): StatusResponse.SerializeToString,
+      ('Radio', 'SetVolume'): StatusResponse.SerializeToString,
       ('Radio', 'Status'): StatusResponse.SerializeToString,
       ('Radio', 'Stop'): StatusResponse.SerializeToString,
       ('Radio', 'SubscribeToUpdates'): StatusResponse.SerializeToString,
@@ -339,6 +400,7 @@ try:
     }
     method_implementations = {
       ('Radio', 'Play'): face_utilities.unary_unary_inline(servicer.Play),
+      ('Radio', 'SetVolume'): face_utilities.unary_unary_inline(servicer.SetVolume),
       ('Radio', 'Status'): face_utilities.unary_unary_inline(servicer.Status),
       ('Radio', 'Stop'): face_utilities.unary_unary_inline(servicer.Stop),
       ('Radio', 'SubscribeToUpdates'): face_utilities.unary_stream_inline(servicer.SubscribeToUpdates),
@@ -356,6 +418,7 @@ try:
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_serializers = {
       ('Radio', 'Play'): PlayRequest.SerializeToString,
+      ('Radio', 'SetVolume'): VolumeRequest.SerializeToString,
       ('Radio', 'Status'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
       ('Radio', 'Stop'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
       ('Radio', 'SubscribeToUpdates'): google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
@@ -363,6 +426,7 @@ try:
     }
     response_deserializers = {
       ('Radio', 'Play'): StatusResponse.FromString,
+      ('Radio', 'SetVolume'): StatusResponse.FromString,
       ('Radio', 'Status'): StatusResponse.FromString,
       ('Radio', 'Stop'): StatusResponse.FromString,
       ('Radio', 'SubscribeToUpdates'): StatusResponse.FromString,
@@ -370,6 +434,7 @@ try:
     }
     cardinalities = {
       'Play': cardinality.Cardinality.UNARY_UNARY,
+      'SetVolume': cardinality.Cardinality.UNARY_UNARY,
       'Status': cardinality.Cardinality.UNARY_UNARY,
       'Stop': cardinality.Cardinality.UNARY_UNARY,
       'SubscribeToUpdates': cardinality.Cardinality.UNARY_STREAM,

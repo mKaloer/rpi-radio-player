@@ -64,6 +64,14 @@ class Radio():
 
 
     @autoconnect()
+    def set_volume(self, volume):
+        if volume > 100 or volume < 0:
+            raise ValueError("Volume must be between 0 and 100")
+        logger.info("Setting volume")
+        self._player.setvol(volume)
+
+
+    @autoconnect()
     def get_status(self):
         logger.info("Get status")
         track_status = self._player.currentsong()

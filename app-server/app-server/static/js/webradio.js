@@ -42,6 +42,20 @@ function Radio() {
 	    radio.status = data;
 	}, "POST");
     };
+    this.set_volume = function(volume, method="socket") {
+	method = method.toLowerCase()
+	if (method === "socket") {
+	    this.socket.emit('volume', { 'volume': volume });
+	} else if (method == "post") {
+	    _send_request(this, 'volume', {
+		'vol': volume
+	    }, function(radio, data) {
+		radio.status = data;
+	    }, "POST");
+	} else {
+	    console.error("Invalid method: " + method);
+	}
+    };
     this.get_status = function() {
 	_send_request(this, 'status', {}, function(radio, data) {
 	    radio.status = data;
@@ -62,6 +76,7 @@ function Radio() {
 	});
     };
 
+    this.socket = null;
     this.status = {};
     this.stations = [];
     this.favorites = [];
@@ -86,6 +101,22 @@ function RadioController() {
     this.stop = function(e, view) {
 	var radio = view.radio;
 	radio.stop();
+    };
+    this.change_volume = function(e, view) {
+	var radio = view.radio;
+	if (e.type == 'inputchange') {
+	    // User is dragging. Set delay to prevent too frequent updates
+	    window.clearTimeout($(this).data("volume_event_timeout"));
+	    $(this).data("volume_event_timeout", setTimeout(function () {
+		var volume = radio.status.volume;
+		radio.set_volume(volume, method="socket");
+	    }, 400));
+	} else {
+	    window.clearTimeout($(this).data("volume_event_timeout"));
+	    var volume = radio.status.volume;
+	    radio.set_volume(volume, method="socket");
+	}
+
     };
     this.set_favorite = function(e, view) {
 	var station = view.station;
