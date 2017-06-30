@@ -14,7 +14,6 @@ python-mimeparse==1.6.0
 sqlalchemy==1.1.10
 flask-cors==3.0.2
 psycopg2==2.7.1
-redis==2.10.5
 flask-socketio==2.8.6
 python-engineio==1.5.4
 python-socketio==1.7.5

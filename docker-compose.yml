@@ -12,7 +12,6 @@ services:
       - "8080"
     depends_on:
       - db
-      - redis
 
   web-radio:
     build:
@@ -42,15 +41,6 @@ services:
     depends_on:
       - app-server
       - api-server
-
-  redis:
-    build:
-      context: ./redis
-    restart: always
-    container_name: rpi-radio-redis
-    expose:
-      - 6379
-
 
   db:
     image: tobi312/rpi-postgresql
