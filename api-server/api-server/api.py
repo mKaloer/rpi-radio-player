@@ -13,7 +13,9 @@ import gevent
 import config
 import radio_rpc
 from models import Station
-import resources
+import resources.stations
+import resources.discover
+import resources.settings
 import db
 
 # Monkey patch (for gevent)
@@ -99,13 +101,13 @@ def on_status_updated(status):
 def on_favorite_change(mapper, connection, target):
     try:
         app.logger.info("Sending station change event")
-        fav_json = marshal(target, resources.station_fields)
+        fav_json = marshal(target, resources.stations.station_fields)
         socketio.emit('station', fav_json, json=True, broadcast=True)
     except:
         app.logger.warning("Error handling station change", exc_info=True)
 
 def _format_status(status):
-    return marshal(status, resources.status_fields)
+    return marshal(status, resources.stations.status_fields)
 
 def _abort_json(err_code, message):
     abort(make_response(jsonify(
@@ -119,9 +121,12 @@ radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
 radio.subscribe_to_updates(on_status_updated)
 
 api = Api(app)
-api.add_resource(resources.StationListResource, '/stations')
-api.add_resource(resources.StationResource, '/stations/<string:id>')
-api.add_resource(resources.StatusResource, '/status', resource_class_args=[radio])
+api.add_resource(resources.stations.StationListResource, '/stations')
+api.add_resource(resources.stations.StationResource, '/stations/<string:id>')
+api.add_resource(resources.stations.StatusResource, '/status', resource_class_args=[radio])
+api.add_resource(resources.settings.SettingsListResource, '/settings')
+api.add_resource(resources.settings.SettingsResource, '/settings/<string:key>')
+api.add_resource(resources.discover.SearchResource, '/discover/search')
 
 
 if __name__ == "__main__":

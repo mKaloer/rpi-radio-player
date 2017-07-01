@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% set active_page = "settings" %}
+{% block content %}
+<div class="row" >
+  <div id="api-settings-card" class="col s12 m6 l4">
+    <div class="card grey lighten-4">
+      <div class="card-content">
+	<span class="card-title">Dirble API</span>
+	<span class="grey-text text-darken-1">Get a free API key at <a href="https://dirble.com/api-doc#authentication" target="_blank">dirble.com</a>.</span>
+	<form id="dirble-settings">
+	  <div class="row">
+	    <div class="input-field col s12">
+	      <input name="apikey" id="dirble-apikey" type="text">
+	      <label for="dirble-apikey">API Key</label>
+	    </div>
+	  </div>
+	  <div class="row">
+	    <button class="btn waves-effect waves-light blue darken-3" type="Save" name="action" rv-on-submit="">Save</button>
+	  </div>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

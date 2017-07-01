@@ -14,6 +14,13 @@ class Station(Base):
     is_favorite = Column(Boolean, nullable=False, default=False)
 
 
+class Settting(Base):
+    __tablename__ = 'settings'
+
+    key = Column(Unicode, primary_key=True)
+    value = Column(Unicode, unique=False, nullable=False)
+
+
 class Log(Base):
     """
     Log item for persistent logging of mayor actions.
