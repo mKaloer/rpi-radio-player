@@ -16,6 +16,7 @@ from models import Station
 import resources.stations
 import resources.discover
 import resources.settings
+from discoverproviders.dirble import DirbleAPI
 import db
 
 # Monkey patch (for gevent)
@@ -117,8 +118,9 @@ def _abort_json(err_code, message):
         }), err_code))
 
 
-radio = radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
-radio.subscribe_to_updates(on_status_updated)
+radio = None#radio_rpc.RadioRPC(config.RADIO_GRPC_HOST)
+#radio.subscribe_to_updates(on_status_updated)
+discover_provider = DirbleAPI('ba4816173d15dafad643128d00')
 
 api = Api(app)
 api.add_resource(resources.stations.StationListResource, '/stations')
@@ -126,8 +128,12 @@ api.add_resource(resources.stations.StationResource, '/stations/<string:id>')
 api.add_resource(resources.stations.StatusResource, '/status', resource_class_args=[radio])
 api.add_resource(resources.settings.SettingsListResource, '/settings')
 api.add_resource(resources.settings.SettingsResource, '/settings/<string:key>')
-api.add_resource(resources.discover.SearchResource, '/discover/search')
+api.add_resource(resources.discover.CategoryListResource, '/discover/categories', resource_class_args=[discover_provider])
+api.add_resource(resources.discover.CategoryStationListResource, '/discover/categories/<int:id>/stations', resource_class_args=[discover_provider])
+api.add_resource(resources.discover.CountryListResource, '/discover/countries', resource_class_args=[discover_provider])
+api.add_resource(resources.discover.CountryStationListResource, '/discover/countries/<string:id>/stations', resource_class_args=[discover_provider])
+#api.add_resource(resources.discover.SearchResource, '/discover/search', resource_class_args=[discover_provider])
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", debug=True)
+    app.run(host="localhost", port=5500, debug=True)

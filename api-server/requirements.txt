@@ -24,3 +24,9 @@ psycogreen==1.0
 aniso8601==1.2.1
 flask-restful==0.3.6
 pytz==2017.2
+certifi==2017.4.17
+chardet==3.0.4
+idna==2.5
+requests==2.18.1
+requests-cache==0.4.13
+urllib3==1.21.1

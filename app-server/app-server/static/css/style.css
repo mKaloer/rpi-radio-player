@@ -109,3 +109,25 @@ nav .input-field input[type=search]::-ms-input-placeholder { /* Microsoft Edge *
 .below-extended-nav {
     margin-top: 56px;
 }
+
+.category-card .card-title {
+    color: rgba(0,0,0,0.87);
+}
+
+.category-card .category-description {
+    color: rgba(0,0,0,0.6);
+}
+
+/* Wave colors */
+.waves-effect.waves-blue .waves-ripple {
+    background-color: #1565c0;
+}
+
+#categories a.card {
+    width: 100%;
+}
+
+#categories .category-description {
+    height: 4em;
+    display: block;
+}

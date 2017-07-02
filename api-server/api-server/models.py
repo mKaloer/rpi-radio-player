@@ -14,7 +14,7 @@ class Station(Base):
     is_favorite = Column(Boolean, nullable=False, default=False)
 
 
-class Settting(Base):
+class Setting(Base):
     __tablename__ = 'settings'
 
     key = Column(Unicode, primary_key=True)

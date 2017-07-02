@@ -1,6 +1,7 @@
 var socket = null;
 var radio = new Radio();
 var radioController = new RadioController();
+var discover = new Discover();
 
 $(document).ready(function() {
     // Materialize CSS menu setup
@@ -9,6 +10,8 @@ $(document).ready(function() {
     rivets.bind($('#player-card'), {radio: radio, radioController: radioController});
     rivets.bind($('.stations-card'), {radio: radio, radioController: radioController});
     rivets.bind($('#add-station-card'), {radio: radio, radioController: radioController});
+    rivets.bind($('#categories'), {radio: radio, radioController: radioController, discover: discover});
+    rivets.bind($('#countries'), {radio: radio, radioController: radioController, discover: discover});
     socket = io.connect("http://" + window.location.hostname + "/socket.io");
     socket.nsp = "/";
     socket.on('status', function(status) {

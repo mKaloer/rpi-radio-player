@@ -147,3 +147,22 @@ function RadioController() {
 	Materialize.updateTextFields();
     };
 };
+
+
+function Discover() {
+    this.get_categories = function() {
+	_send_request(this, 'discover/categories', {}, function(discover, data) {
+	    discover.categories = data;
+	}, "GET");
+    };
+    this.get_countries = function() {
+	_send_request(this, 'discover/countries', {}, function(discover, data) {
+	    discover.countries = data;
+	}, "GET");
+    };
+
+    this.categories = [];
+    this.countries = [];
+    this.get_categories();
+    this.get_countries();
+};

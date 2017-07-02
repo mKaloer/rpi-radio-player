@@ -8,7 +8,8 @@ def index():
 
 
 @app.route("/discover")
-def discover():
+@app.route("/discover/<path:path>")
+def discover(path=None):
     return render_template('discover.html')
 
 

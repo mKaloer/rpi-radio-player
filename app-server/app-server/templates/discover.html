@@ -19,12 +19,12 @@
 {% endblock %}
 {% block content %}
 <div id="categories" class="col s12 below-extended-nav">
-Categories
+  {% include "categories_view.html" %}
 </div>
 <div id="countries" class="col s12 below-extended-nav">
-Countries
+  {% include "countries_view.html" %}
 </div>
 <div id="search" class="col s12 below-extended-nav">
-Search
+  {% include "search_view.html" %}
 </div>
 {% endblock %}
